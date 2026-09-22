@@ -40,4 +40,4 @@ class CustomerListView(generics.ListAPIView):
 
             elif status.upper() == "INACTIVE":
                 queryset = queryset.filter(is_active=False)
-        return queryse
+        return queryset
