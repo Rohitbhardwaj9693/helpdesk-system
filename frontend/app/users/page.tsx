@@ -2,7 +2,7 @@
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { getUsers, User } from "../services/userServices";
-
+import RoleGuard from "../components/RoleGuard";
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,326 +41,325 @@ export default function UsersPage() {
 
   return (
     <ProtectedRoute>
-    <div className="min-h-full bg-slate-100 p-6">
+      <RoleGuard allowedRoles={["ADMIN"]}>
+        <div className="min-h-full bg-slate-100 p-6">
 
-      {/* Page Heading */}
-      <div className="mb-6 flex items-start justify-between">
+          {/* Page Heading */}
+          <div className="mb-6 flex items-start justify-between">
 
-        <div>
-          <h1 className="text-[22px] font-bold text-slate-900">
-            User Management
-          </h1>
+            <div>
+              <h1 className="text-[22px] font-bold text-slate-900">
+                User Management
+              </h1>
 
-          <p className="mt-1 text-sm text-slate-500">
-            Manage system users and their roles
-          </p>
-        </div>
+              <p className="mt-1 text-sm text-slate-500">
+                Manage system users and their roles
+              </p>
+            </div>
 
-        <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
-          + Add User
-        </button>
+            <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
+              + Add User
+            </button>
 
-      </div>
-
-
-      {/* Statistics */}
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
-        <StatCard
-          title="Total Users"
-          value={totalUsers.toString()}
-        />
-
-        <StatCard
-          title="Admins"
-          value={admins.toString()}
-        />
-
-        <StatCard
-          title="Managers"
-          value={managers.toString()}
-        />
-
-        <StatCard
-          title="Agents"
-          value={agents.toString()}
-        />
-
-      </div>
+          </div>
 
 
-      {/* Main Table Card */}
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          {/* Statistics */}
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-        {/* Search / Filter */}
-        <div className="flex items-center gap-3 border-b border-slate-200 p-4">
+            <StatCard
+              title="Total Users"
+              value={totalUsers.toString()}
+            />
 
-          <div className="flex h-9 w-[255px] items-center rounded-md border border-slate-300 px-3">
+            <StatCard
+              title="Admins"
+              value={admins.toString()}
+            />
 
-            <svg
-              className="h-4 w-4 text-slate-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-4-4" />
-            </svg>
+            <StatCard
+              title="Managers"
+              value={managers.toString()}
+            />
 
-            <input
-              type="text"
-              placeholder="Search users..."
-              className="ml-2 w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+            <StatCard
+              title="Agents"
+              value={agents.toString()}
             />
 
           </div>
 
 
-          <select className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-600 outline-none">
+          {/* Main Table Card */}
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
 
-            <option>All Roles</option>
-            <option>ADMIN</option>
-            <option>MANAGER</option>
-            <option>AGENT</option>
+            {/* Search / Filter */}
+            <div className="flex items-center gap-3 border-b border-slate-200 p-4">
 
-          </select>
+              <div className="flex h-9 w-[255px] items-center rounded-md border border-slate-300 px-3">
 
-        </div>
+                <svg
+                  className="h-4 w-4 text-slate-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-4-4" />
+                </svg>
 
+                <input
+                  type="text"
+                  placeholder="Search users..."
+                  className="ml-2 w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+                />
 
-        {/* Loading */}
-        {loading && (
-          <div className="p-8 text-center text-sm text-slate-500">
-            Loading users...
-          </div>
-        )}
-
-
-        {/* Table */}
-        {!loading && (
-          <div className="overflow-x-auto">
-
-            <table className="w-full min-w-[1050px]">
-
-              <thead>
-                <tr className="border-b border-slate-200">
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    USER
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    EMAIL
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    ROLE
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    DEPARTMENT
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    STATUS
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    LAST LOGIN
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    CREATED
-                  </th>
-
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
-                    ACTIONS
-                  </th>
-
-                </tr>
-              </thead>
+              </div>
 
 
-              <tbody>
+              <select className="h-9 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-600 outline-none">
 
-                {users.map((user) => (
+                <option>All Roles</option>
+                <option>ADMIN</option>
+                <option>MANAGER</option>
+                <option>AGENT</option>
 
-                  <tr
-                    key={user.id}
-                    className="border-b border-slate-100 hover:bg-slate-50"
-                  >
+              </select>
 
-                    {/* User */}
-                    <td className="px-4 py-3">
-
-                      <div className="flex items-center gap-3">
-
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-                          {getInitials(user.full_name)}
-                        </div>
-
-                        <span className="text-sm font-semibold text-slate-900">
-                          {user.full_name}
-                        </span>
-
-                      </div>
-
-                    </td>
+            </div>
 
 
-                    {/* Email */}
-                    <td className="px-4 py-3 text-sm text-slate-600">
-                      {user.email}
-                    </td>
+            {/* Loading */}
+            {loading && (
+              <div className="p-8 text-center text-sm text-slate-500">
+                Loading users...
+              </div>
+            )}
 
 
-                    {/* Role */}
-                    <td className="px-4 py-3">
+            {/* Table */}
+            {!loading && (
+              <div className="overflow-x-auto">
 
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                          user.role === "ADMIN"
-                            ? "bg-red-100 text-red-500"
-                            : user.role === "MANAGER"
-                              ? "bg-purple-100 text-purple-600"
-                              : "bg-blue-100 text-blue-600"
-                        }`}
-                      >
-                        {user.role}
-                      </span>
+                <table className="w-full min-w-[1050px]">
 
-                    </td>
+                  <thead>
+                    <tr className="border-b border-slate-200">
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        USER
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        EMAIL
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        ROLE
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        DEPARTMENT
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        STATUS
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        LAST LOGIN
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        CREATED
+                      </th>
+
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500">
+                        ACTIONS
+                      </th>
+
+                    </tr>
+                  </thead>
 
 
-                    {/* Department */}
-                    <td className="px-4 py-3 text-sm text-slate-600">
-                      {user.department || "-"}
-                    </td>
+                  <tbody>
 
+                    {users.map((user) => (
 
-                    {/* Status */}
-                    <td className="px-4 py-3">
-
-                      <span
-                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-                          user.is_active
-                            ? "bg-emerald-100 text-emerald-600"
-                            : "bg-red-100 text-red-500"
-                        }`}
+                      <tr
+                        key={user.id}
+                        className="border-b border-slate-100 hover:bg-slate-50"
                       >
 
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${
-                            user.is_active
-                              ? "bg-emerald-500"
-                              : "bg-red-500"
-                          }`}
-                        />
+                        {/* User */}
+                        <td className="px-4 py-3">
 
-                        {user.is_active ? "Active" : "Disabled"}
+                          <div className="flex items-center gap-3">
 
-                      </span>
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+                              {getInitials(user.full_name)}
+                            </div>
 
-                    </td>
+                            <span className="text-sm font-semibold text-slate-900">
+                              {user.full_name}
+                            </span>
 
+                          </div>
 
-                    {/* Last Login */}
-                    <td className="px-4 py-3 text-sm text-slate-500">
-                      {user.last_login
-                        ? new Date(user.last_login).toLocaleString()
-                        : "Never"}
-                    </td>
+                        </td>
 
 
-                    {/* Created */}
-                    <td className="px-4 py-3 text-sm text-slate-500">
-                      {new Date(user.date_joined).toLocaleDateString()}
-                    </td>
+                        {/* Email */}
+                        <td className="px-4 py-3 text-sm text-slate-600">
+                          {user.email}
+                        </td>
 
 
-                    {/* Actions */}
-                    <td className="px-4 py-3">
+                        {/* Role */}
+                        <td className="px-4 py-3">
 
-                      <button className="text-lg text-slate-500 hover:text-slate-800">
-                        ⋮
-                      </button>
+                          <span
+                            className={`rounded-full px-2.5 py-1 text-xs font-semibold ${user.role === "ADMIN"
+                              ? "bg-red-100 text-red-500"
+                              : user.role === "MANAGER"
+                                ? "bg-purple-100 text-purple-600"
+                                : "bg-blue-100 text-blue-600"
+                              }`}
+                          >
+                            {user.role}
+                          </span>
 
-                    </td>
-
-                  </tr>
-
-                ))}
-
-
-                {users.length === 0 && (
-                  <tr>
-
-                    <td
-                      colSpan={8}
-                      className="px-4 py-10 text-center text-sm text-slate-500"
-                    >
-                      No users found.
-                    </td>
-
-                  </tr>
-                )}
-
-              </tbody>
-
-            </table>
-
-          </div>
-        )}
+                        </td>
 
 
-        {/* Pagination */}
-        <div className="flex h-14 items-center justify-between border-t border-slate-200 px-4">
-
-          <div className="flex items-center gap-3 text-sm text-slate-500">
-
-            <span>Rows per page</span>
-
-            <select className="h-8 rounded border border-slate-300 bg-white px-2">
-              <option>10</option>
-            </select>
-
-            <span>
-              1–{users.length} of {users.length}
-            </span>
-
-          </div>
+                        {/* Department */}
+                        <td className="px-4 py-3 text-sm text-slate-600">
+                          {user.department || "-"}
+                        </td>
 
 
-          <div className="flex items-center gap-1">
+                        {/* Status */}
+                        <td className="px-4 py-3">
 
-            <button className="h-8 w-8 rounded text-slate-400">
-              «
-            </button>
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${user.is_active
+                              ? "bg-emerald-100 text-emerald-600"
+                              : "bg-red-100 text-red-500"
+                              }`}
+                          >
 
-            <button className="h-8 w-8 rounded text-slate-400">
-              ‹
-            </button>
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${user.is_active
+                                ? "bg-emerald-500"
+                                : "bg-red-500"
+                                }`}
+                            />
 
-            <button className="h-8 w-8 rounded bg-blue-600 text-sm font-semibold text-white">
-              1
-            </button>
+                            {user.is_active ? "Active" : "Disabled"}
 
-            <button className="h-8 w-8 rounded text-slate-400">
-              ›
-            </button>
+                          </span>
 
-            <button className="h-8 w-8 rounded text-slate-400">
-              »
-            </button>
+                        </td>
+
+
+                        {/* Last Login */}
+                        <td className="px-4 py-3 text-sm text-slate-500">
+                          {user.last_login
+                            ? new Date(user.last_login).toLocaleString()
+                            : "Never"}
+                        </td>
+
+
+                        {/* Created */}
+                        <td className="px-4 py-3 text-sm text-slate-500">
+                          {new Date(user.date_joined).toLocaleDateString()}
+                        </td>
+
+
+                        {/* Actions */}
+                        <td className="px-4 py-3">
+
+                          <button className="text-lg text-slate-500 hover:text-slate-800">
+                            ⋮
+                          </button>
+
+                        </td>
+
+                      </tr>
+
+                    ))}
+
+
+                    {users.length === 0 && (
+                      <tr>
+
+                        <td
+                          colSpan={8}
+                          className="px-4 py-10 text-center text-sm text-slate-500"
+                        >
+                          No users found.
+                        </td>
+
+                      </tr>
+                    )}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+            )}
+
+
+            {/* Pagination */}
+            <div className="flex h-14 items-center justify-between border-t border-slate-200 px-4">
+
+              <div className="flex items-center gap-3 text-sm text-slate-500">
+
+                <span>Rows per page</span>
+
+                <select className="h-8 rounded border border-slate-300 bg-white px-2">
+                  <option>10</option>
+                </select>
+
+                <span>
+                  1–{users.length} of {users.length}
+                </span>
+
+              </div>
+
+
+              <div className="flex items-center gap-1">
+
+                <button className="h-8 w-8 rounded text-slate-400">
+                  «
+                </button>
+
+                <button className="h-8 w-8 rounded text-slate-400">
+                  ‹
+                </button>
+
+                <button className="h-8 w-8 rounded bg-blue-600 text-sm font-semibold text-white">
+                  1
+                </button>
+
+                <button className="h-8 w-8 rounded text-slate-400">
+                  ›
+                </button>
+
+                <button className="h-8 w-8 rounded text-slate-400">
+                  »
+                </button>
+
+              </div>
+
+            </div>
 
           </div>
 
         </div>
-
-      </div>
-
-    </div>
+      </RoleGuard>
     </ProtectedRoute>
   );
 }

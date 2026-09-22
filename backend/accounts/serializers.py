@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User 
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -52,3 +52,4 @@ class CreateUserSerializer(serializers.ModelSerializer):
             **validated_data
         )  
         return user
+
